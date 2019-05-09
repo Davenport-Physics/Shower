@@ -1,10 +1,12 @@
 
 #include <cstdio>
+#include <cstring>
 
 #include "memory.hh"
+#include "shared.hh"
 
 char name[17];
-unsigned char *cartridge_memory;
+uint_8 *cartridge_memory;
 
 CartridgeType cartridge;
 GameboyType gameboy;
@@ -25,7 +27,9 @@ long int GetFileSize(char *cartridge)
 void InitCartridgeMemory(char *cartridge) 
 {
 
-	cartridge_memory = new unsigned char[GetFileSize(cartridge)];
+	long int file_size = GetFileSize(cartridge);
+	cartridge_memory   = new uint_8[file_size];
+	memset(cartridge_memory, 0, file_size);
 
 }
 

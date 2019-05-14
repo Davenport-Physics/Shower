@@ -83,6 +83,30 @@ void SetGameInfo()
 
 }
 
+void SetRamBank0() 
+{
+
+	for (size_t i = 0; i < 0x4000) {
+	
+		memory[i] = cartridge_memory[i];
+	
+	}
+
+}
+
+void SetRamBankn(int bank) 
+{
+
+	int bank_idx = (bank - 1) * 0x4000;
+	for (size_t i = 0x4000; i < 0x8000;i++) {
+	
+		memory[i] = cartridge_memory[bank_idx];
+		bank_idx++;
+
+	}
+
+}
+
 void SetMemory() 
 {
 	
@@ -101,6 +125,7 @@ void SetMemory()
 	}
 
 	memset(memory, 0, memory_model);
+	SetRamBank0();
 
 }
 

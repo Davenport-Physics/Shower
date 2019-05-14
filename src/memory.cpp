@@ -10,36 +10,12 @@
 #define MAX_CARTRIDGE_SIZE 8388608
 
 char name[17]; 
-long cartridge_size;
+long memory_pointer = 0x0100;
 uint_8 *cartridge_memory;
+uint_8 *memory;
 
 CartridgeType cartridge;
 GameboyType gameboy;
-
-long GetFileSize(char *cartridge) 
-{
-	// TODO or maybe not?
-	// Value obtained is different than the amount of bytes read.
-
-	FILE *fp = fopen(cartridge, "rb");
-	
-	if (fp == NULL) {
-	
-		printf("Unable to open %s\n", cartridge);
-		exit(0);
-
-	}
-
-	fseek(fp, 0, SEEK_END);
-
-	unsigned long filesize = ftell(fp);
-	fclose(fp);
-
-	printf("detected catridge file size = %d bytes\n", filesize);
-
-	return filesize;
-
-}
 
 void InitCartridgeMemory(char *cartridge) 
 {
@@ -94,6 +70,7 @@ void ParseGameName()
 	
 	}
 	name[16] = {'\0'};
+	printf("cart name = %s\n", name);
 
 }
 
@@ -108,7 +85,21 @@ void SetGameInfo()
 
 void SetMemory() 
 {
+	
+	int memory_model = 0;
 
+	if (gameboy == GAMEBOY) {
+	
+		memory_model = 0xFFFF;
+		memory       = new uint_8[0xFFFF];
+
+	} else {
+	
+		// TODO reserved for GAMEBOY_COLOR
+
+	}
+
+	memset(memory, 0, memory_model);
 
 }
 
@@ -125,5 +116,6 @@ void ExitMemory()
 {
 
 	delete [] cartridge_memory;
+	delete [] memory;
 
 }

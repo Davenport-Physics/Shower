@@ -1,6 +1,8 @@
 #ifndef MEMORY_HH
 #define MEMORY_HH
 
+#include "shared.hh"
+
 typedef enum CartridgeType 
 {
 
@@ -37,5 +39,9 @@ typedef enum GameboyType {
 } GameboyType;
 
 void InitMemory(char *cartridge);
+void ExitMemory();
+
+uint_8 GetValueAtAddress(long address);
+uint_8 GetNextMemoryValue();
 
 #endif

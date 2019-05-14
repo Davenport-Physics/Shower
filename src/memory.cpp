@@ -92,6 +92,7 @@ void SetMemory()
 	
 		memory_model = 0xFFFF;
 		memory       = new uint_8[0xFFFF];
+		printf("GAMEBOY cartridge memory set\n");
 
 	} else {
 	
@@ -117,5 +118,22 @@ void ExitMemory()
 
 	delete [] cartridge_memory;
 	delete [] memory;
+
+}
+
+uint_8 GetValueAtAddress(long address) 
+{
+
+	return memory[address];
+
+}
+
+uint_8 GetNextMemoryValue() 
+{
+
+	uint_8 instruction = memory[memory_pointer];
+	memory_pointer++;
+
+	return instruction;
 
 }

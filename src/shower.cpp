@@ -27,10 +27,18 @@ void InitShower(int argc, char **argv)
 
 }
 
+void ExitProgram() 
+{
+	
+	ExitMemory();
+
+}
+
 int main(int argc, char **argv) 
 {
 
 	InitShower(argc, argv);
+	ExitProgram();
 
 	return 0;
 

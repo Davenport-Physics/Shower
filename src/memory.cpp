@@ -10,7 +10,8 @@
 #define MAX_CARTRIDGE_SIZE 8388608
 
 char name[17]; 
-long memory_pointer = 0x0100;
+uint_16 memory_pointer = 0x0100;
+uint_16 stack_pointer  = 0xFFFE;
 uint_8 *cartridge_memory;
 uint_8 *memory;
 
@@ -86,7 +87,7 @@ void SetGameInfo()
 void SetRamBank0() 
 {
 
-	for (size_t i = 0; i < 0x4000) {
+	for (size_t i = 0; i < 0x4000; i++) {
 	
 		memory[i] = cartridge_memory[i];
 	

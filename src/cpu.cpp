@@ -1,8 +1,59 @@
 
+#include "memory.hh"
 #include "shared.hh"
 
-uint_8 registers[8];
-uint_8 flag_register = 0x0000;
+uint_16 AF_register;
+uint_16 BC_register;
+uint_16 DE_register;
+uint_16 HL_register;
+
+struct flag_register {
+
+	uint_8 zero;
+	uint_8 subtract;
+	uint_8 half_carry;
+	uint_8 carry;
+
+};
+
+struct flag_register flags = {0 , 0 , 0 , 0};
+
+// 
+void LoadEightBitNNToN(uint_8 instruction) 
+{
+
+	uint_16 nn         = GetNextMemoryValue();
+	uint_16 nn_shifted = (nn << 8);
+	switch (instruction) {
+	
+	case 0x06:
+		BC_register = nn_shifted | (BC_register & 0x00FF);
+	break;
+
+	case 0x0E:
+		BC_register = (BC_register & 0xFF00) | nn;
+	break;
+
+	case 0x16:
+		DE_register = nn_shifted | (DE_register & 0x00FF);
+	break;
+
+	case 0x1E:
+		DE_register = (DE_register & 0xFF00) | nn;
+	break;
+
+	case 0x26:
+		HL_register = nn_shifted | (HL_register & 0x00FF);
+	break;
+
+	case 0x2E:
+		HL_register = (HL_register & 0xFF00) | nn;
+	break;
+	
+	}
+
+}
+
 
 // 0xC3 + LSB of nn + MSB of nn
 // 3 bytes
@@ -19,6 +70,7 @@ void UnconditionalJump(uint_8 instruction)
 void UnconditionalJumpToHL(uint_8 instruction) 
 {
 
+	Jump(HL_register);
 
 }
 
@@ -125,7 +177,7 @@ void UnconditionalCallFromOpcode(uint_8 instruction)
 {
 
 	if (instruction ^ 0xC7) {
-	
+
 	}
 
 }
@@ -158,9 +210,9 @@ void ScheduleIME(uint_8 instruction)
 void CCF(uint_8 instruction) 
 {
 
-	flag_register ^= 0x10;
-	flag_register &= 0xDF;
-	flag_register &= 0xBF;
+	flags.carry     ^= 1;
+	flags.subtract   = 0;
+	flags.half_carry = 0;
 
 }
 
@@ -171,9 +223,9 @@ void CCF(uint_8 instruction)
 void SCF(uint_8 instruction) 
 {
 
-	flag_register |= 0x10;
-    flag_register &= 0xDF;
-    flag_register &= 0xBF;
+	flags.carry      = 1;
+	flags.subtract   = 0;
+	flags.half_carry = 0;
 
 }
 
@@ -184,6 +236,7 @@ void SCF(uint_8 instruction)
 void NOP(uint_8 instruction) 
 {
 
+	return;
 
 }
 
@@ -201,6 +254,8 @@ void DAA(uint_8 instruction)
 void CPL(uint_8 instruction) 
 {
 
-	registers[0] ^= 0xFF;
+	AF_register     ^= 0xFF00;
+	flags.subtract   = 1;
+	flags.half_carry = 1;
 
 }

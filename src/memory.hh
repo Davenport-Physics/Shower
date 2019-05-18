@@ -44,4 +44,7 @@ void ExitMemory();
 uint_8 GetValueAtAddress(long address);
 uint_8 GetNextMemoryValue();
 
+void Jump(uint_16);
+void CallFunction(uint_16);
+
 #endif

@@ -163,3 +163,9 @@ uint_8 GetNextMemoryValue()
 	return instruction;
 
 }
+
+void Jump(uint_16) 
+{
+
+
+}
